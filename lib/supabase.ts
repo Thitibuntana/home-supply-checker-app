@@ -8,26 +8,13 @@ const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!;
 
 const isWeb = Platform.OS === 'web';
-const isSSR = typeof window === 'undefined';
-
-const customStorage = {
-  getItem: async (key: string) => {
-    if (isSSR) return null;
-    return await AsyncStorage.getItem(key);
-  },
-  setItem: async (key: string, value: string) => {
-    if (isSSR) return;
-    await AsyncStorage.setItem(key, value);
-  },
-  removeItem: async (key: string) => {
-    if (isSSR) return;
-    await AsyncStorage.removeItem(key);
-  },
-};
+// On web, we use Supabase's built-in localStorage support (which handles SSR safely)
+// On native, we use AsyncStorage
+const authStorage = isWeb ? undefined : AsyncStorage;
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
-    storage: customStorage,
+    storage: authStorage as any,
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: isWeb,

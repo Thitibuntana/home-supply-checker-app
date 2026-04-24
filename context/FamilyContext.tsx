@@ -88,12 +88,12 @@ export function FamilyProvider({ children }: { children: ReactNode }) {
 
   const joinFamily = async (code: string) => {
     if (!profile) return { error: 'Not logged in' };
-    const { data: fam, error } = await supabase
-      .from('families')
-      .select('*')
-      .eq('invite_code', code.toUpperCase().trim())
-      .single();
-    if (error || !fam) return { error: 'Invalid invite code' };
+    // Use the secure RPC lookup to bypass RLS before joining
+    const { data: fams, error } = await supabase
+      .rpc('get_family_by_code', { code_input: code.toUpperCase().trim() });
+      
+    if (error || !fams || fams.length === 0) return { error: 'Invalid invite code' };
+    const fam = fams[0];
     const { error: updateError } = await supabase
       .from('profiles')
       .update({ family_id: fam.id })
