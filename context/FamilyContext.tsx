@@ -21,6 +21,7 @@ interface FamilyContextValue {
   kickMember: (memberId: string) => Promise<{ error: string | null }>;
   transferHead: (memberId: string) => Promise<{ error: string | null }>;
   renameFamily: (newName: string) => Promise<{ error: string | null }>;
+  disbandFamily: () => Promise<{ error: string | null }>;
   regenerateCode: () => Promise<{ error: string | null }>;
   refresh: () => Promise<void>;
 }
@@ -164,6 +165,20 @@ export function FamilyProvider({ children }: { children: ReactNode }) {
     return { error: null };
   };
 
+  const disbandFamily = async () => {
+    if (!isHead || !family) return { error: 'Only the head can disband the family' };
+    const { error } = await supabase
+      .from('families')
+      .delete()
+      .eq('id', family.id);
+    if (error) return { error: error.message };
+    
+    setFamily(null);
+    setMembers([]);
+    await refreshProfile();
+    return { error: null };
+  };
+
   return (
     <FamilyContext.Provider
       value={{
@@ -177,6 +192,7 @@ export function FamilyProvider({ children }: { children: ReactNode }) {
         kickMember,
         transferHead,
         renameFamily,
+        disbandFamily,
         regenerateCode,
         refresh: fetchFamily,
       }}

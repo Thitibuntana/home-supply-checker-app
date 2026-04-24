@@ -37,6 +37,7 @@ export default function FamilyScreen() {
     kickMember,
     transferHead,
     renameFamily,
+    disbandFamily,
     regenerateCode,
   } = useFamily();
 
@@ -108,6 +109,24 @@ export default function FamilyScreen() {
     if (err) Alert.alert('Error', err);
     setIsRenaming(false);
     setActionLoading(false);
+  };
+
+  const handleDisband = () => {
+    Alert.alert(
+      'Disband Family',
+      'Are you sure? This will delete the family and all shared supply items forever for everyone. This cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Disband',
+          style: 'destructive',
+          onPress: async () => {
+            const { error: err } = await disbandFamily();
+            if (err) Alert.alert('Error', err);
+          },
+        },
+      ]
+    );
   };
 
 
@@ -270,14 +289,25 @@ export default function FamilyScreen() {
         ))}
 
 
-        <Button
-          title="Leave Family"
-          variant="danger"
-          onPress={handleLeave}
-          fullWidth
-          style={{ marginTop: SPACING.xl }}
-          size="md"
-        />
+        {isHead ? (
+          <Button
+            title="Disband Family"
+            variant="danger"
+            onPress={handleDisband}
+            fullWidth
+            style={{ marginTop: SPACING.xl }}
+            size="md"
+          />
+        ) : (
+          <Button
+            title="Leave Family"
+            variant="danger"
+            onPress={handleLeave}
+            fullWidth
+            style={{ marginTop: SPACING.xl }}
+            size="md"
+          />
+        )}
       </ScrollView>
     </View>
   );
