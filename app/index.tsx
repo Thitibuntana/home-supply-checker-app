@@ -1,6 +1,6 @@
 import { Redirect } from 'expo-router';
+import { ActivityIndicator, View } from 'react-native';
 import { useAuth } from '../context/AuthContext';
-import { View, ActivityIndicator } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 
 export default function Index() {
@@ -17,3 +17,5 @@ export default function Index() {
 
   return session ? <Redirect href="/(app)" /> : <Redirect href="/(auth)/login" />;
 }
+
+//commit pls pls pls
