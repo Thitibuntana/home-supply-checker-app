@@ -1,26 +1,28 @@
 {
   "expo": {
-    "name": "home-supply-checker-app",
-    "slug": "home-supply-checker-app",
+    "name": "HomeStock",
+    "slug": "homestock-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "homesupplycheckerapp",
+    "scheme": "homestock",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0F0F1A"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.homestock.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#0F0F1A"
       },
+      "package": "com.homestock.app",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
